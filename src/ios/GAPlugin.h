@@ -1,13 +1,13 @@
 #import <Cordova/CDVPlugin.h>
 
-@interface GAPlugin : CDVPlugin
+@interface GaPlugin : CDVPlugin
 {
 }
-- (void)initGA:(NSMutableArray *)arguments withDict:(NSMutableDictionary *)options;
-- (void)sendEvent:(NSMutableArray *)arguments withDict:(NSMutableDictionary *)options;
-- (void)sendView:(NSMutableArray *)arguments withDict:(NSMutableDictionary *)options;
-- (void)setCustomDimension:(NSMutableArray *)arguments withDict:(NSMutableDictionary *)options;
-- (void)setCustomMetric:(NSMutableArray *)arguments withDict:(NSMutableDictionary *)options;
-- (void)sendTiming:(NSMutableArray *)arguments withDict:(NSMutableDictionary *)options;
-- (void)sendException:(NSMutableArray *)arguments withDict:(NSMutableDictionary *)options;
+- (void)initGA:(CDVInvokedUrlCommand*)command;
+- (void)sendEvent:(CDVInvokedUrlCommand*)command;
+- (void)sendView:(CDVInvokedUrlCommand*)command;
+- (void)setCustomDimension:(CDVInvokedUrlCommand*)command;
+- (void)setCustomMetric:(CDVInvokedUrlCommand*)command;
+- (void)sendTiming:(CDVInvokedUrlCommand*)command;
+- (void)sendException:(CDVInvokedUrlCommand*)command;
 @end

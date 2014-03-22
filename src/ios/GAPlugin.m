@@ -4,14 +4,13 @@
 #import "GAI.h"
 #import <Cordova/CDVPluginResult.h>
 
-@implementation GAPlugin
+@implementation GaPlugin
 
 
-- (void)initGA:(NSMutableArray *)arguments withDict:(NSMutableDictionary *)options
+- (void)initGA:(CDVInvokedUrlCommand*)command
 {
-	NSString *callbackId = [arguments pop];
-	NSString *trackingId = [arguments objectAtIndex:0];
-	int dispatchInterval = [[arguments objectAtIndex:1] intValue];
+	NSString *trackingId = [command.arguments objectAtIndex:0];
+	int dispatchInterval = [[command.arguments objectAtIndex:1] intValue];
     
     // Optional: automatically send uncaught exceptions to Google Analytics.
     [GAI sharedInstance].trackUncaughtExceptions = YES;
@@ -25,17 +24,17 @@
     // Initialize tracker.
     [[GAI sharedInstance] trackerWithTrackingId:trackingId];
     
-	[self successWithMessage:[NSString stringWithFormat:@"initGA: accountID = %@; Interval = %d seconds", trackingId, dispatchInterval] toID:callbackId];
+    
+    [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[NSString stringWithFormat:@"initGA: accountID = %@; Interval = %d seconds", trackingId, dispatchInterval]] callbackId:command.callbackId];
 }
 
 
-- (void)sendEvent:(NSMutableArray *)arguments withDict:(NSMutableDictionary *)options
+- (void)sendEvent:(CDVInvokedUrlCommand*)command
 {
-	NSString *callbackId = [arguments pop];
-	NSString *category = [arguments objectAtIndex:0];
-	NSString *eventAction = [arguments objectAtIndex:1];
-	NSString *eventLabel = [arguments objectAtIndex:2];
-    NSNumber *eventValue = [arguments objectAtIndex:3];
+	NSString *category = [command.arguments objectAtIndex:0];
+	NSString *eventAction = [command.arguments objectAtIndex:1];
+	NSString *eventLabel = [command.arguments objectAtIndex:2];
+    NSNumber *eventValue = [command.arguments objectAtIndex:3];
     
     
     id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
@@ -47,18 +46,17 @@
                                                                label:eventLabel          // Event label
                                                                value:eventValue] build]];    // Event value
         
-		[self successWithMessage:[NSString stringWithFormat:@"sendEvent: category = %@; action = %@; label = %@; value = %@", category, eventAction, eventLabel, eventValue] toID:callbackId];
+        [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[NSString stringWithFormat:@"sendEvent: category = %@; action = %@; label = %@; value = %@", category, eventAction, eventLabel, eventValue]] callbackId:command.callbackId];
 	}
 	else
 	{
-		[self failWithMessage:@"sendEvent failed - not initialized" toID:callbackId withError:nil];
+        [self.commandDelegate sendPluginResult: [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"sendEvent failed - not initialized"] callbackId:command.callbackId];
 	}
 }
 
-- (void)sendView:(NSMutableArray *)arguments withDict:(NSMutableDictionary *)options
+- (void)sendView:(CDVInvokedUrlCommand*)command
 {
-	NSString *callbackId = [arguments pop];
-	NSString *pageURL = [arguments objectAtIndex:0];
+	NSString *pageURL = [command.arguments objectAtIndex:0];
     
     id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
     
@@ -72,19 +70,18 @@
         
         [tracker send:[[GAIDictionaryBuilder createAppView] build]];
         
-		[self successWithMessage:[NSString stringWithFormat:@"sendView: url = %@", pageURL] toID:callbackId];
+        [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[NSString stringWithFormat:@"sendView: url = %@", pageURL]] callbackId:command.callbackId];
 	}
 	else
 	{
-		[self failWithMessage:@"sendView failed - not initialized" toID:callbackId withError:nil];
+        [self.commandDelegate sendPluginResult: [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"sendView failed - not initialized"] callbackId:command.callbackId];
 	}
 }
 
-- (void)setCustomDimension:(NSMutableArray *)arguments withDict:(NSMutableDictionary *)options
+- (void)setCustomDimension:(CDVInvokedUrlCommand*)command
 {
-	NSString *callbackId = [arguments pop];
-	NSInteger index = [[arguments objectAtIndex:0] intValue];
-	NSString *value = [arguments objectAtIndex:1];
+	NSInteger index = [[command.arguments objectAtIndex:0] intValue];
+	NSString *value = [command.arguments objectAtIndex:1];
     
     id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
     
@@ -97,19 +94,18 @@
         [tracker set:[GAIFields customDimensionForIndex:index]
                value:value];
         
-        [self successWithMessage:[NSString stringWithFormat:@"setCustom: index = %ld, value = %@;", (long)index, value] toID:callbackId];
+        [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[NSString stringWithFormat:@"setCustom: index = %ld, value = %@;", (long)index, value]] callbackId:command.callbackId];
 	}
 	else
 	{
-		[self failWithMessage:@"setCustom failed - not initialized" toID:callbackId withError:nil];
+        [self.commandDelegate sendPluginResult: [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"setCustom failed - not initialized"] callbackId:command.callbackId];
 	}
 }
 
-- (void)setCustomMetric:(NSMutableArray *)arguments withDict:(NSMutableDictionary *)options
+- (void)setCustomMetric:(CDVInvokedUrlCommand*)command
 {
-	NSString *callbackId = [arguments pop];
-	NSInteger index = [[arguments objectAtIndex:0] intValue];
-	NSString *value = [arguments objectAtIndex:1];
+	NSInteger index = [[command.arguments objectAtIndex:0] intValue];
+	NSString *value = [command.arguments objectAtIndex:1];
     
     id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
     
@@ -118,22 +114,20 @@
         [tracker set:[GAIFields customMetricForIndex:index]
                value:value];
         
-		[self successWithMessage:[NSString stringWithFormat:@"setCustom: index = %ld, value = %@;", (long)index, value] toID:callbackId];
+        [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[NSString stringWithFormat:@"setCustom: index = %ld, value = %@;", (long)index, value]] callbackId:command.callbackId];
 	}
 	else
 	{
-		[self failWithMessage:@"setCustom failed - not initialized" toID:callbackId withError:nil];
+        [self.commandDelegate sendPluginResult: [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"setCustom failed - not initialized"] callbackId:command.callbackId];
 	}
 }
 
-- (void)sendTiming:(NSMutableArray *)arguments withDict:(NSMutableDictionary *)options
+- (void)sendTiming:(CDVInvokedUrlCommand*)command
 {
-	NSString *callbackId = [arguments pop];
-    
-	NSString *category = [arguments objectAtIndex:0];
-    NSNumber *time = [NSNumber numberWithLong:[[arguments objectAtIndex:1] longValue]];
-	NSString *name = [arguments objectAtIndex:2];
-	NSString *label = [arguments objectAtIndex:3];
+	NSString *category = [command.arguments objectAtIndex:0];
+    NSNumber *time = [NSNumber numberWithLong:[[command.arguments objectAtIndex:1] longValue]];
+	NSString *name = [command.arguments objectAtIndex:2];
+	NSString *label = [command.arguments objectAtIndex:3];
     
     
     id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
@@ -145,20 +139,18 @@
                                                                 name:@"high scores"  // Timing name
                                                                label:nil] build]];    // Timing label
         
-		[self successWithMessage:[NSString stringWithFormat:@"sendTimingWithCategory: category = %@, time = %@, name = %@, label = %@;", category, time, name, label] toID:callbackId];
+        [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[NSString stringWithFormat:@"sendTimingWithCategory: category = %@, time = %@, name = %@, label = %@;", category, time, name, label]] callbackId:command.callbackId];
 	}
 	else
 	{
-		[self failWithMessage:@"sendTimingWithCategory failed - not initialized" toID:callbackId withError:nil];
+        [self.commandDelegate sendPluginResult: [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"sendTimingWithCategory failed - not initialized"] callbackId:command.callbackId];
 	}
 }
 
-- (void)sendException:(NSMutableArray *)arguments withDict:(NSMutableDictionary *)options
+- (void)sendException:(CDVInvokedUrlCommand*)command
 {
-	NSString *callbackId = [arguments pop];
-    
-	NSString *message = [arguments objectAtIndex:0];
-	NSNumber *fatal = [arguments objectAtIndex:1];
+	NSString *message = [command.arguments objectAtIndex:0];
+	NSNumber *fatal = [command.arguments objectAtIndex:1];
     
     id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
     
@@ -167,11 +159,12 @@
         [tracker send:[[GAIDictionaryBuilder
                        createExceptionWithDescription:message// Exception description. May be truncated to 100 chars.
                        withFatal:fatal] build]];  // isFatal (required). NO indicates non-fatal exception.
-        [self successWithMessage:[NSString stringWithFormat:@"sendException: message = %@;", message] toID:callbackId];
+
+        [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[NSString stringWithFormat:@"sendException: message = %@;", message]] callbackId:command.callbackId];
 	}
 	else
 	{
-		[self failWithMessage:@"sendException failed - not initialized" toID:callbackId withError:nil];
+        [self.commandDelegate sendPluginResult: [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"sendException failed - not initialized"] callbackId:command.callbackId];
 	}
 }
 
