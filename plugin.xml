@@ -13,11 +13,11 @@
         <engine name="cordova" version=">=3.0.0" />
     </engines>
 
-    <!-- 
+    
     <js-module src="www/ga-plugin.js" name="ga-plugin">
-        <clobbers target="gaPlugin" />
+        <clobbers target="window.plugins.gaPlugin" />
     </js-module>
-    -->
+   
 
     <!-- ios -->
     <platform name="ios">
