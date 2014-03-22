@@ -1,2 +1,0 @@
-cordova-google-analytics-plugin
-===============================
