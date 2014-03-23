@@ -1,4 +1,4 @@
-package cc.dozer.cordova.ga-plugin;
+package cc.dozer.cordova.gaplugin;
 
 import com.google.analytics.tracking.android.*;
 import org.apache.cordova.CallbackContext;
