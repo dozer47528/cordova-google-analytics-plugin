@@ -62,11 +62,10 @@
     
 	if(tracker)
 	{
-        
         // This screen name value will remain set on the tracker and sent with
         // hits until it is set to a new value or to nil.
-        [tracker set:pageURL
-               value:nil];
+        [tracker set:kGAIScreenName
+           value:pageURL];
         
         [tracker send:[[GAIDictionaryBuilder createAppView] build]];
         
@@ -87,9 +86,6 @@
     
 	if(tracker)
 	{
-		// May return nil if a tracker has not yet been initialized with a property ID.
-        id tracker = [[GAI sharedInstance] defaultTracker];
-        
         // Set the custom dimension value on the tracker using its index.
         [tracker set:[GAIFields customDimensionForIndex:index]
                value:value];
