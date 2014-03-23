@@ -27,7 +27,7 @@
         </config-file>
 
         <source-file src="src/android/libs/libGoogleAnalyticsServices.jar" target-dir="libs/" />
-        <!-- <source-file src="src/android/src/com/dianping/ba/crm/Mobile/GaPlugin.java" target-dir="src/com/dianping/ba/crm/Mobile" /> -->
+        <source-file src="src/android/src/com/dianping/ba/crm/Mobile/GaPlugin.java" target-dir="src/com/dianping/ba/crm/Mobile" />
     </platform>
    
     <!-- ios -->
