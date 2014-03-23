@@ -22,7 +22,7 @@
     <platform name="android">
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="GaPlugin">
-                <param name="android-package" value="cc.dozer.cordova.ga-plugin.GaPlugin" />
+                <param name="android-package" value="cc.dozer.cordova.gaplugin.GaPlugin" />
             </feature>
         </config-file>
 
