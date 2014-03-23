@@ -17,8 +17,19 @@
     <js-module src="www/ga-plugin.js" name="ga-plugin">
         <clobbers target="window.plugins.gaPlugin" />
     </js-module>
-   
 
+    <!-- android -->
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="GaPlugin">
+                <param name="android-package" value="com.dianping.ba.crm.Mobile.GaPlugin" />
+            </feature>
+        </config-file>
+
+        <source-file src="src/android/libs/libGoogleAnalyticsServices.jar" target-dir="libs/" />
+        <!-- <source-file src="src/android/src/com/dianping/ba/crm/Mobile/GaPlugin.java" target-dir="src/com/dianping/ba/crm/Mobile" /> -->
+    </platform>
+   
     <!-- ios -->
     <platform name="ios">
         <config-file target="config.xml" parent="/*">
