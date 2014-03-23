@@ -1,4 +1,4 @@
-package com.dianping.ba.crm.Mobile;
+package cc.dozer.cordova.ga-plugin;
 
 import com.google.analytics.tracking.android.*;
 import org.apache.cordova.CallbackContext;
